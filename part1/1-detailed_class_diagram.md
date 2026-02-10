@@ -1,4 +1,3 @@
-```markdown
 ```mermaid
 classDiagram
     %% Base class for common attributes
