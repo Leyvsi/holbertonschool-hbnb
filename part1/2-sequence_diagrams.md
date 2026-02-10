@@ -1,14 +1,14 @@
-```markdown
 ```mermaid
 sequenceDiagram
     autonumber
-    %% Participants for all scenarios
+    %% Participants for all API call scenarios
     participant Client
     participant API
     participant Facade
     participant DB
 
     %% 1. User Registration Flow
+    %% Goal: Create a new user account after checking email
     Note over Client, DB: User Registration
     Client->>API: POST /users
     API->>Facade: register_user(data)
@@ -20,6 +20,7 @@ sequenceDiagram
     API-->>Client: 201 Created
 
     %% 2. Place Creation Flow
+    %% Goal: Register a new property listing
     Note over Client, DB: Place Creation
     Client->>API: POST /places
     API->>Facade: create_place(data)
@@ -31,6 +32,7 @@ sequenceDiagram
     API-->>Client: 201 Created
 
     %% 3. Review Submission Flow
+    %% Goal: Submit a rating for a specific place
     Note over Client, DB: Review Submission
     Client->>API: POST /reviews
     API->>Facade: add_review(data)
@@ -42,6 +44,7 @@ sequenceDiagram
     API-->>Client: 201 Created
 
     %% 4. Fetching Places Flow
+    %% Goal: Retrieve a list of all places
     Note over Client, DB: Fetching Places
     Client->>API: GET /places
     API->>Facade: get_all_places()
