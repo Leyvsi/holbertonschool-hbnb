@@ -23,15 +23,17 @@ class User(BaseModel):
         # Placeholder for associated reviews
         self.reviews = []
 
-API EndpointsThe API is structured to handle requests following REST principles:EntityMethodEndpointDescriptionUserPOST/api/v1/users/Register a new userPlaceGET/api/v1/places/Retrieve a list of all placesReviewPOST/api/v1/reviews/Post a new review for a placeAmenityPUT/api/v1/amenities/<id>Update an amenity's details
+API EndpointsThe API is structured to handle requests following REST principles:
+Entity,Method,Endpoint,Description
+User,POST,/api/v1/users/,Register a new user
+Place,GET,/api/v1/places/,Retrieve a list of all places
+Review,POST,/api/v1/reviews/,Post a new review for a place
+Amenity,PUT,/api/v1/amenities/<id>,Update an amenity's details
 
 How to Run and Test
 Install Dependencies:
-
-Bash
 pip install -r requirements.txt
 Start the Flask Server:
-
-Bash
 python run.py
+
 API Documentation: Access the interactive Swagger documentation at http://localhost:5000/api/v1/docs.
