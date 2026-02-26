@@ -1,39 +1,10 @@
-HBnB - BL and API
-Part 2: Business Logic & API Development
-This phase marks the transition from design to implementation. We are building the core of the HBnB Evolution application using the Flask framework, focusing on the Business Logic Layer and the Presentation Layer (RESTful API).
-
-Key Features
-Layered Architecture: Strict separation between the Presentation (API), Business Logic (Services/Models), and Persistence layers.
-
-Core Entities: Implementation of User, Place, Review, and Amenity classes with full validation.
-
-Repository Pattern: Implementation of an in-memory storage system to abstract data access before the database integration.
-
-RESTful API: Development of endpoints to perform CRUD (Create, Read, Update, Delete) operations on all entities.
-
-Example : 
-# Implementation of the User model with business rules
-class User(BaseModel):
-    def __init__(self, email, first_name, last_name):
-        super().__init__()
-        # Validate email format and uniqueness
-        self.email = email
-        self.first_name = first_name
-        self.last_name = last_name
-        # Placeholder for associated reviews
-        self.reviews = []
-
-API EndpointsThe API is structured to handle requests following REST principles:
-Entity,Method,Endpoint,Description
-User,POST,/api/v1/users/,Register a new user
-Place,GET,/api/v1/places/,Retrieve a list of all places
-Review,POST,/api/v1/reviews/,Post a new review for a place
-Amenity,PUT,/api/v1/amenities/<id>,Update an amenity's details
-
-How to Run and Test
-Install Dependencies:
-pip install -r requirements.txt
-Start the Flask Server:
-python run.py
-
-API Documentation: Access the interactive Swagger documentation at http://localhost:5000/api/v1/docs.
+HBnB Evolution - Business Logic & API Implementation1. IntroductionFollowing the architectural blueprints defined in Part 1, this phase focuses on the actual implementation of the HBnB Evolution core. We transition from conceptual UML diagrams to a functional RESTful API. This stage implements the Business Logic Layer, the Presentation Layer, and an initial In-Memory Persistence Layer to validate the system's behavior.2. Implementation ArchitectureThe codebase strictly follows the Layered Architecture and the Facade Pattern to ensure modularity:Services (Facade): A unified interface that mediates between the API controllers and the underlying models.Models: Python implementation of the User, Place, Review, and Amenity entities.Data Validation: Logic to ensure data integrity (e.g., unique emails, valid ratings).In-Memory Storage: A temporary repository used to store objects during runtime before the SQL integration in Part 3.3. Core Entities & Business RulesEvery entity inherits from a BaseModel to provide a consistent structure:User: Handles authentication and profile data.Place: Manages listings, linked to a specific Owner (User).Review: Links a User to a Place with a rating and comment.Amenity: Represents individual features (e.g., "WiFi", "Air Conditioning").Python# Base model for all entities
+# Provides unique ID and timestamps for every object
+class BaseModel:
+    def __init__(self):
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+4. API Endpoints (Presentation Layer)The API is organized into versioned namespaces (/api/v1/). Key endpoints implemented in this phase:EndpointMethodDescription/users/POSTCreate a new user profile/places/GETRetrieve all property listings/reviews/POSTSubmit feedback for a specific place/amenities/GETList all available features5. Development SetupTo run the application locally:Environment: Ensure Python 3.10+ is installed.Dependencies: Install the required packages:Bashpip install -r requirements.txt
+Run: Execute the main entry point:Bashpython run.py
+How to explore this implementationCheck the /models/ directory: To see the OOP implementation of the business entities.Check the /api/ directory: To see how Flask-RESTX defines the endpoints and namespaces.Check the /services/ directory: To see the Facade pattern in action, centralizing the app logic.
