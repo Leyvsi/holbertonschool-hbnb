@@ -51,6 +51,14 @@ class PlaceResource(Resource):
         """Get place details by ID"""
         # Placeholder for the logic to retrieve a place by ID, inclu' associated owner n amenities
         pass
+@api.route('/<place_id>/reviews')
+class PlaceReviewList(Resource):
+    @api.response(200, 'List of reviews for the place retrieved successfully')
+    @api.response(404, 'Place not found')
+    def get(self, place_id):
+        """Get all reviews for a specific place"""
+        # Placeholder for logic to return a list of reviews for a place
+        pass
 
     @api.expect(place_model)
     @api.response(200, 'Place updated successfully')
