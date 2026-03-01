@@ -11,6 +11,8 @@ class HBnBFacade:
         """Initialize repositories"""
         self.user_repo = InMemoryRepository()
         self.amenity_repo = InMemoryRepository()
+        self.place_repo = InMemoryRepository()
+        self.review_repo = InMemoryRepository()
 
     def create_user(self, user_data):
         """Create and return a new user"""
@@ -53,17 +55,17 @@ class HBnBFacade:
 
     # Place methods
     def create_place(self, place_data):
-        """Create a new place"""
-        pass
+        owner = self.get_user(place_data['owner_id'])
+        if not owner:
+            raise ValueError("Owner not found")
 
-    def get_place(self, place_id):
-        """Retrieve place by ID"""
-        pass
+        # Remove owner_id to not confuse Place constructor
+        data = place_data.copy()
+        owner_id = data.pop('owner_id')
+
+        place = Place(owner=owner, **data)
+        self.place_repo.add(place)
+        return place
 
     def get_all_places(self):
-        """Retrieve all places"""
-        pass
-
-    def update_place(self, place_id, place_data):
-        """Update a place"""
-        pass
+        return self.place_repo.get_all()
