@@ -7,6 +7,9 @@ from flask_restx import Api
 
 # Import the namespaces from your API modules
 from app.api.v1.users import ns as users_ns
+from app.api.v1.amenities import ns as amenities_ns
+api.add_namespace(amenities_ns, path='/api/v1/amenities')
+api.add_namespace(amenities_ns, path='/api/v1/amenities')
 # Future namespaces to be imported as you develop them:
 # from api.v1.places import ns as places_ns
 # from api.v1.amenities import ns as amenities_ns
