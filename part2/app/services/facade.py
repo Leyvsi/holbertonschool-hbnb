@@ -5,6 +5,8 @@ Facade module for handling business logic and repository interactions.
 from app.persistence.repository import InMemoryRepository
 from app.models.user import User
 from app.models.amenity import Amenity
+from app.models.place import Place
+from app.models.review import Review
 
 class HBnBFacade:
     def __init__(self):
@@ -55,17 +57,44 @@ class HBnBFacade:
 
     # Place methods
     def create_place(self, place_data):
-        owner = self.get_user(place_data['owner_id'])
+        """Create a place with owner validation"""
+        owner = self.get_user(place_data.get('owner_id'))
         if not owner:
             raise ValueError("Owner not found")
 
-        # Remove owner_id to not confuse Place constructor
         data = place_data.copy()
-        owner_id = data.pop('owner_id')
+        data.pop('owner_id', None)
 
         place = Place(owner=owner, **data)
         self.place_repo.add(place)
         return place
 
+    def get_place(self, place_id):
+        """Retrieve place by ID"""
+        return self.place_repo.get(place_id)
+
     def get_all_places(self):
+        """Retrieve all places"""
         return self.place_repo.get_all()
+
+    # Review methods
+    def create_review(self, review_data):
+        """Create a review with user and place validation"""
+        user = self.get_user(review_data.get('user_id'))
+        place = self.get_place(review_data.get('place_id'))
+
+        if not user or not place:
+            raise ValueError("Invalid User or Place ID")
+
+        review = Review(
+            text=review_data['text'],
+            rating=review_data['rating'],
+            place=place,
+            user=user
+        )
+        self.review_repo.add(review)
+        return review
+
+    def get_all_reviews(self):
+        """Retrieve all reviews"""
+        return self.review_repo.get_all()
