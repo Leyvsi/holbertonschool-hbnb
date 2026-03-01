@@ -30,6 +30,10 @@ class HBnBFacade:
         """Retrieve user by email"""
         return self.user_repo.get_by_attribute('email', email)
 
+    def get_all_users(self):
+        """Retrieve all users"""
+        return self.user_repo.get_all()
+
     # Amenity methods
     def create_amenity(self, amenity_data):
         """Create and return a new amenity"""
