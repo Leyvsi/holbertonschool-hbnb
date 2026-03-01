@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """User module"""
+import re
 from app.models.base_model import BaseModel
 
 class User(BaseModel):
@@ -12,8 +13,11 @@ class User(BaseModel):
             raise ValueError("First name is required (max 50 chars)")
         if not last_name or len(last_name) > 50:
             raise ValueError("Last name is required (max 50 chars)")
-        if not email: # Email format validation will be handled at service/API level
-            raise ValueError("Email is required")
+
+        # Email validation with regex
+        email_regex = r"[^@]+@[^@]+\.[^@]+"
+        if not email or not re.match(email_regex, email):
+            raise ValueError("A valid email address is required")
 
         self.first_name = first_name
         self.last_name = last_name

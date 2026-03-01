@@ -4,7 +4,7 @@ from app.models.base_model import BaseModel
 
 class Place(BaseModel):
     """Place entity representing property listings."""
-    
+
     def __init__(self, title, description, price, latitude, longitude, owner):
         """Initialize Place with strict coordinate and price validation."""
         super().__init__()
