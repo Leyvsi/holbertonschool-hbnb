@@ -5,10 +5,8 @@ Main application factory and API initialization.
 from flask import Flask
 from flask_restx import Api
 
-# Import the namespaces from your API modules
-# from api.v1.places import ns as places_ns
-# from api.v1.amenities import ns as amenities_ns
-# from api.v1.reviews import ns as reviews_ns
+from app.api.v1.users import ns as users_ns
+from app.api.v1.amenities import ns as amenities_ns
 
 def create_app():
     """
