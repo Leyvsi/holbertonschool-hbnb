@@ -5,7 +5,7 @@ from app.models.base_model import BaseModel
 class Place(BaseModel):
     """Place entity representing property listings."""
 
-    def __init__(self, title, description, price, latitude, longitude, owner, description=None):
+    def __init__(self, title, price, latitude, longitude, owner, description=None):
         """Initialize Place with strict coordinate and price validation."""
         super().__init__()
         if not title or len(title) > 100:
