@@ -8,6 +8,7 @@ from flask_restx import Api
 from app.api.v1.users import ns as users_ns
 from app.api.v1.amenities import ns as amenities_ns
 from app.api.v1.places import ns as places_ns
+from app.api.v1.reviews import ns as reviews_ns
 
 def create_app():
     """
