@@ -7,6 +7,7 @@ from flask_restx import Api
 
 from app.api.v1.users import ns as users_ns
 from app.api.v1.amenities import ns as amenities_ns
+from app.api.v1.places import ns as places_ns
 
 def create_app():
     """
@@ -21,10 +22,9 @@ def create_app():
               description='HBnB Application API Documentation',
               doc='/api/v1/' # URL for the Swagger UI
     )
-    # 2. Register the namespaces HERE, after 'api' is defined
-    # English comments: Registering user and amenity namespaces
+    #Register the namespaces HERE, after 'api' is defined
     api.add_namespace(users_ns, path='/api/v1/users')
     api.add_namespace(amenities_ns, path='/api/v1/amenities')
-
+    api.add_namespace(places_ns, path='/api/v1/places')
 
     return app
