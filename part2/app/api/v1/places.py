@@ -3,10 +3,8 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
 
-# Use 'ns' as agreed for consistency
 ns = Namespace('places', description='Place operations')
 
-# Related entity models using 'ns'
 amenity_model = ns.model('PlaceAmenity', {
     'id': fields.String(description='Amenity ID'),
     'name': fields.String(description='Name of the amenity')
@@ -26,7 +24,6 @@ review_model = ns.model('PlaceReview', {
     'user_id': fields.String(description='User ID')
 })
 
-# Main Place model for input and documentation
 place_model = ns.model('Place', {
     'title': fields.String(required=True, description='Title of the place'),
     'description': fields.String(description='Description of the place'),
@@ -64,6 +61,7 @@ class PlaceList(Resource):
             'price': p.price
         } for p in places], 200
 
+
 @ns.route('/<place_id>')
 class PlaceResource(Resource):
     @ns.response(200, 'Place details retrieved successfully')
@@ -86,3 +84,33 @@ class PlaceResource(Resource):
                 'email': place.owner.email
             }
         }, 200
+
+    @ns.expect(place_model, validate=True)
+    @ns.response(200, 'Place updated successfully')
+    @ns.response(404, 'Place not found')
+    @ns.response(400, 'Invalid input data')
+    def put(self, place_id):
+        """Update a place's information"""
+        place_data = ns.payload
+
+        place = facade.get_place(place_id)
+        if not place:
+            return {'error': 'Place not found'}, 404
+
+        # On bloque le changement de owner_id dans cette version
+        if place_data.get('owner_id') != place.owner.id:
+            return {'error': 'owner_id cannot be updated'}, 400
+
+        try:
+            updated_place = facade.update_place(place_id, place_data)
+            return {
+                'id': updated_place.id,
+                'title': updated_place.title,
+                'description': updated_place.description,
+                'price': updated_place.price,
+                'latitude': updated_place.latitude,
+                'longitude': updated_place.longitude,
+                'owner_id': updated_place.owner.id
+            }, 200
+        except ValueError as e:
+            return {'error': str(e)}, 400

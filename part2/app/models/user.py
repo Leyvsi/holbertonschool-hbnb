@@ -2,6 +2,7 @@
 import re
 from app.models.base_model import BaseModel
 
+
 class User(BaseModel):
     def init(self, first_name, last_name, email, password=None, is_admin=False):
         super().init()

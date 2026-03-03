@@ -5,7 +5,6 @@ from app.services import facade
 
 ns = Namespace('users', description='User operations')
 
-# Define the user model for input validation and documentation
 user_model = ns.model('User', {
     'first_name': fields.String(required=True, description='First name of the user'),
     'last_name': fields.String(required=True, description='Last name of the user'),
@@ -41,14 +40,12 @@ class UserList(Resource):
     def get(self):
         """Retrieve a list of all users"""
         users = facade.get_all_users()
-        return [
-            {
-                'id': u.id,
-                'first_name': u.first_name,
-                'last_name': u.last_name,
-                'email': u.email
-            } for u in users
-        ], 200
+        return [{
+            'id': u.id,
+            'first_name': u.first_name,
+            'last_name': u.last_name,
+            'email': u.email
+        } for u in users], 200
 
 
 @ns.route('/<user_id>')
@@ -77,12 +74,10 @@ class UserResource(Resource):
         """Update a user's information"""
         user_data = ns.payload
 
-        # Ensure user exists
         user = facade.get_user(user_id)
         if not user:
             return {'error': 'User not found'}, 404
 
-        # Email uniqueness check (allow same email if it's the same user)
         existing_user = facade.get_user_by_email(user_data['email'])
         if existing_user and existing_user.id != user_id:
             return {'error': 'Email already registered'}, 400
@@ -97,4 +92,3 @@ class UserResource(Resource):
             }, 200
         except ValueError as e:
             return {'error': str(e)}, 400
-
