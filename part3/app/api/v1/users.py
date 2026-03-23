@@ -2,13 +2,24 @@
 """User API endpoints"""
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
 ns = Namespace('users', description='User operations')
 
-user_model = ns.model('User', {
+user_input_model = ns.model('User', {
     'first_name': fields.String(required=True, description='First name of the user'),
     'last_name': fields.String(required=True, description='Last name of the user'),
     'email': fields.String(required=True, description='Email of the user')
+    'password': fields.String(required=True, description='Password of the user (min 8 chars)'),
+    'is_admin': fields.Boolean(required=False, description='Admin status (admin auth required if true)')
+})
+
+user_output_model = ns.model('User', {
+    'id': fields.String(description='User ID'),
+    'first_name': fields.String(description='First name of the user'),
+    'last_name': fields.String(description='Last name of the user'),
+    'email': fields.String(description='Email of the user'),
+    'is_admin': fields.Boolean(description='Admin status')
 })
 
 @ns.route('/')
@@ -17,78 +28,97 @@ class UserList(Resource):
     @ns.response(201, 'User successfully created')
     @ns.response(400, 'Email already registered')
     @ns.response(400, 'Invalid input data')
+    @ns.response(403, 'Admin access required to create admin users')
+    @ns.doc(security='Bearer')
+    @jwt_required(optional=True)
     def post(self):
         """Register a new user"""
         user_data = ns.payload
+
+         if user_data.get('is_admin', False):
+            # Auth required for admin creation
+            claims = get_jwt()
+            if not claims or not claims.get('is_admin', False):
+                return {'error': 'Admin privileges required to create admin users'}, 403
 
         existing_user = facade.get_user_by_email(user_data['email'])
         if existing_user:
             return {'error': 'Email already registered'}, 400
 
-        try:
+        if 'password' not in user_data or not user_data['password']:
+            return {'error': 'Password is required'}, 400
+       
+       try:
             new_user = facade.create_user(user_data)
-            return {
-                'id': new_user.id,
-                'first_name': new_user.first_name,
-                'last_name': new_user.last_name,
-                'email': new_user.email
-            }, 201
-        except ValueError as e:
-            return {'error': str(e)}, 400
+            
+        except (TypeError, ValueError) as e:
+            return {"error": str(e)}, 400
+        return new_user.to_dict(), 201
 
-    @ns.response(200, 'List of users retrieved successfully')
+   
+    @ns.marshal_list_with(user_output_model)
+    @ns.response(200, 'List of users')
+    @ns.response(403, 'Admin access required')
+    @ns.doc(security='Bearer')
+    @jwt_required()
     def get(self):
-        """Retrieve a list of all users"""
+      
+        claims = get_jwt()
+        if not claims.get('is_admin', False):
+            return {'error': 'Admin privileges required'}, 403
+
         users = facade.get_all_users()
-        return [{
-            'id': u.id,
-            'first_name': u.first_name,
-            'last_name': u.last_name,
-            'email': u.email
-        } for u in users], 200
+        return [u.to_dict() for u in users], 200
 
 
-@ns.route('/<user_id>')
-class UserResource(Resource):
+    @ns.route('/<user_id>')
+    class UserResource(Resource):
+
+    @ns.marshal_with(user_output_model)
     @ns.response(200, 'User details retrieved successfully')
     @ns.response(404, 'User not found')
     def get(self, user_id):
-        """Get user details by ID"""
+     
         user = facade.get_user(user_id)
         if not user:
             return {'error': 'User not found'}, 404
+        return user.to_dict()
 
-        return {
-            'id': user.id,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'email': user.email
-        }, 200
-
-    @ns.expect(user_model, validate=True)
+    
+    @ns.expect(user_input_model, validate=True)
+    @ns.marshal_with(user_output_model)
     @ns.response(200, 'User updated successfully')
     @ns.response(404, 'User not found')
-    @ns.response(400, 'Email already registered')
-    @ns.response(400, 'Invalid input data')
+    @ns.response(403, 'Unauthorized action')
+    @ns.doc(security='Bearer')
+    @jwt_required()
     def put(self, user_id):
-        """Update a user's information"""
-        user_data = ns.payload
+    
+        current_user_id = get_jwt_identity()
+        claims = get_jwt()
+        is_admin = claims.get('is_admin', False)
 
+        
         user = facade.get_user(user_id)
         if not user:
             return {'error': 'User not found'}, 404
 
-        existing_user = facade.get_user_by_email(user_data['email'])
-        if existing_user and existing_user.id != user_id:
-            return {'error': 'Email already registered'}, 400
+        
+        if not is_admin and user_id != current_user_id:
+            return {"error": "You can only modify your own profile"}, 403
 
-        try:
-            updated_user = facade.update_user(user_id, user_data)
-            return {
-                'id': updated_user.id,
-                'first_name': updated_user.first_name,
-                'last_name': updated_user.last_name,
-                'email': updated_user.email
-            }, 200
-        except ValueError as e:
-            return {'error': str(e)}, 400
+        user_data = ns.payload
+
+        
+        if not is_admin and 'is_admin' in user_data:
+            return {"error": "Only admins can modify admin status"}, 403
+
+        
+        if 'email' in user_data:
+            existing_user = facade.get_user_by_email(user_data['email'])
+            if existing_user and existing_user.id != user_id:
+                return {'error': 'Email already in use'}, 400
+
+        
+        updated_user = facade.update_user(user_id, user_data)
+        return updated_user.to_dict(), 200
