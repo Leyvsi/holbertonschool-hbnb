@@ -2,51 +2,67 @@
 """Amenity API endpoints"""
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
-# Variable renamed to 'ns' as requested for consistency
+
 ns = Namespace('amenities', description='Amenity operations')
 
-# Define the amenity model for input validation and documentation
-amenity_model = ns.model('Amenity', {
+
+amenity_input_model = ns.model('AmenityInput', {
     'name': fields.String(required=True, description='Name of the amenity')
+})
+
+amenity_output_model = ns.model('Amenity', {
+    'id': fields.String(description='Amenity ID'),
+    'name': fields.String(description='Name of the amenity')
 })
 
 @ns.route('/')
 class AmenityList(Resource):
-    @ns.expect(amenity_model)
+    @ns.expect(amenity_input_model)
+    @ns.marshal_with(amenity_output_model, code=201)
     @ns.response(201, 'Amenity successfully created')
     @ns.response(400, 'Invalid input data')
     def post(self):
-        """Register a new amenity"""
+        
         amenity_data = ns.payload
-        # Calling the facade to create the amenity
-        new_amenity = facade.create_amenity(amenity_data)
-        return {'id': new_amenity.id, 'name': new_amenity.name}, 201
+        try:
+            new_amenity = facade.create_amenity(amenity_data)
+            return new_amenity.to_dict(), 201
+        except (ValueError, TypeError) as e:
+            return {"error": str(e)}, 400
 
+    @ns.marshal_list_with(amenity_output_model)
     @ns.response(200, 'List of amenities retrieved successfully')
     def get(self):
-        """Retrieve a list of all amenities"""
+  
         amenities = facade.get_all_amenities()
-        return [{'id': a.id, 'name': a.name} for a in amenities], 200
+        return [a.to_dict() for a in amenities], 200
+
 
 @ns.route('/<amenity_id>')
 class AmenityResource(Resource):
+    @ns.marshal_with(amenity_output_model)
     @ns.response(200, 'Amenity details retrieved successfully')
     @ns.response(404, 'Amenity not found')
     def get(self, amenity_id):
-        """Get amenity details by ID"""
-        amenity = facade.get_amenity(amenity_id)
-        if not amenity:
-            return {'error': 'Amenity not found'}, 404
-        return {'id': amenity.id, 'name': amenity.name}, 200
+ 
+        get_amenity = facade.get_amenity(amenity_id)
+        if not get_amenity:
+            return {"error": "Amenity not found"}, 404
+        return get_amenity.to_dict(), 200
 
-    @ns.expect(amenity_model)
+    @ns.expect(amenity_input_model)
+    @ns.marshal_with(amenity_output_model)
     @ns.response(200, 'Amenity updated successfully')
     @ns.response(404, 'Amenity not found')
+    @ns.response(400, 'Invalid input data')
     def put(self, amenity_id):
-        """Update an amenity's information"""
-        amenity_data = ns.payload
+       
+       amenity_data = ns.payload
         updated_amenity = facade.update_amenity(amenity_id, amenity_data)
+
         if not updated_amenity:
-            return {'error': 'Amenity not found'}, 404
-        return {'message': 'Amenity updated successfully'}, 200
+            return {"error": "Amenity not found"}, 404
+        return updated_amenity.to_dict(), 200
+
