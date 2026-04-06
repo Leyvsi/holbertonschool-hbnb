@@ -60,7 +60,7 @@ class AmenityResource(Resource):
     def put(self, amenity_id):
        
        amenity_data = ns.payload
-        updated_amenity = facade.update_amenity(amenity_id, amenity_data)
+       updated_amenity = facade.update_amenity(amenity_id, amenity_data)
 
         if not updated_amenity:
             return {"error": "Amenity not found"}, 404
