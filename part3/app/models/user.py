@@ -1,10 +1,20 @@
 #!/usr/bin/python3
 import re
 from app.models.base_model import BaseModel
-from app.extensions import db
+from hbnb.app.extensions import db
+from app import db, bcrypt
 
 class User(BaseModel):
+    __tablename__ = 'users'
+
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(120), nullable=False, unique=True)
+    password = db.Column(db.String(128), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
+    
     def __init__(self, first_name, last_name, email, password=None, is_admin=False):
+        
         super().__init__()
 
         if not first_name or len(first_name) > 50:
