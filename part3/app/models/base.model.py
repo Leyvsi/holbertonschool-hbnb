@@ -5,24 +5,29 @@ Provides the base class for all entities in the HBnB application.
 """
 import uuid
 from datetime import datetime
-from hbnb.app.extensions import db
-
-class BaseModel:
+from app import db
+class BaseModel(db.Model):
     """Base class that defines all common attributes/methods for other classes."""
+
+    __abstract__ = True
 
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         """Initialize a new base model instance."""
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+        
+        super().__init__(**kwargs)
+
+        if not self.id:
+            self.id = str(uuid.uuid4())
 
     def save(self):
         """Update the updated_at timestamp whenever the object is modified."""
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.utcnow()
+        db.session.add(self)
+        db.session.commit()
 
     def update(self, data):
         """Update object attributes based on a dictionary of new values."""
