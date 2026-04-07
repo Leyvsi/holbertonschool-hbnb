@@ -15,7 +15,7 @@ class Login(Resource):
     @ns.expect(login_model, validate=True)
     def post(self):
         """Authenticate user and return a JWT token"""
-        credentials = api.payload
+        credentials = ns.payload
 
         user = facade.get_user_by_email(credentials['email'])
 
