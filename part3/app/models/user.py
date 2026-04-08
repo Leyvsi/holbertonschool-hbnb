@@ -2,6 +2,7 @@
 import re
 from app.models.base_model import BaseModel
 from app import db, bcrypt
+from sqlalchemy.orm import relationship
 
 class User(BaseModel):
     __tablename__ = 'users'
@@ -11,29 +12,25 @@ class User(BaseModel):
     email = db.Column(db.String(120), nullable=False, unique=True)
     password = db.Column(db.String(128), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
+
+    places = relationship('Place', backref='owner', lazy=True, cascade="all, delete-orphan")
+
+    reviews = relationship('Review', backref='user', lazy=True, cascade="all, delete-orphan")
     
     def __init__(self, **kwargs):
         
-        first_name = kwargs.get('first_name')
-        last_name = kwargs.get('last_name')
-        email = kwargs.get('email')
         password = kwargs.pop('password', None)
         
         super().__init__(**kwargs)
 
-        if not first_name or len(first_name) > 50:
+        if not self.first_name or len(self.first_name) > 50:
             raise ValueError("First name is required (max 50 chars)")
-        if not last_name or len(last_name) > 50:
+        if not self.last_name or len(self.last_name) > 50:
             raise ValueError("Last name is required (max 50 chars)")
 
         email_regex = r"[^@]+@[^@]+\.[^@]+"
-        if not email or not re.match(email_regex, email):
+        if not self.email or not re.match(email_regex, self.email):
             raise ValueError("A valid email address is required")
-        
-        self.first_name = first_name
-        self.last_name = last_name
-        self.email = email
-        self.is_admin = kwargs.get('is_admin', False)
 
         if password:
             self.hash_password(password)
