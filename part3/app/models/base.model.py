@@ -12,8 +12,8 @@ class BaseModel(db.Model):
     __abstract__ = True
 
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=db.func.now())
+    updated_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
 
     def __init__(self, **kwargs):
         """Initialize a new base model instance."""
@@ -25,7 +25,6 @@ class BaseModel(db.Model):
 
     def save(self):
         """Update the updated_at timestamp whenever the object is modified."""
-        self.updated_at = datetime.utcnow()
         db.session.add(self)
         db.session.commit()
 
