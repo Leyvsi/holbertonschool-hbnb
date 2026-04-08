@@ -9,17 +9,21 @@ class Amenity(BaseModel):
 
     name = db.Column(db.String(50), nullable=False)
 
-    def __init__(self, name):
+    def __init__(self, **kwargs):
         """Initialize Amenity with name validation."""
-        super().__init__()
+
+        name = kwargs.get('name')
         if not isinstance(name, str):
             raise TypeError("Amenity name must be a string.")
-        elif not name.strip():
-            raise ValueError("Amenity name cannot be empty.")
+        
+        name = name.strip()
         if not name or len(name) > 50:
-            raise ValueError("Amenity name is required (max 50 chars)")
-        self.name = name
+            raise ValueError("Amenity name is required and cannot be empty (max 50 chars)")
     
+        kwargs['name'] = name
+        
+        super().__init__(**kwargs)
+
     def to_dict(self):
         return {
             "id": self.id,

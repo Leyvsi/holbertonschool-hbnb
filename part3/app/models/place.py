@@ -6,9 +6,22 @@ from app import db
 class Place(BaseModel):
     """Place entity representing property listings."""
 
-    def __init__(self, title, price, latitude, longitude, owner, amenity , description=None):
+    __tablename__ = 'places'
+
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(500), nullable=True)
+    price = db.Column(db.Float, nullable=False)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
+
+    def __init__(self, **kwargs):
         """Initialize Place with strict coordinate and price validation."""
-        super().__init__()
+        title = kwargs.get('title')
+        price = kwargs.get('price', 0)
+        latitude = kwargs.get('latitude', 0.0)
+        longitude = kwargs.get('longitude', 0.0)
+
+
         if not title or len(title) > 100:
             raise ValueError("Title is required (max 100 chars)")
         if price <= 0:
@@ -17,24 +30,5 @@ class Place(BaseModel):
             raise ValueError("Latitude must be between -90.0 and 90.0")
         if not (-180.0 <= longitude <= 180.0):
             raise ValueError("Longitude must be between -180.0 and 180.0")
-        if owner is None:
-            raise ValueError("A place must have a valid owner")
 
-        self.title = title
-        self.description = description # Optional
-        self.price = float(price)
-        self.latitude = float(latitude)
-        self.longitude = float(longitude)
-        self.owner = owner  # User instance
-        self.amenities = [] # List of Amenity instances
-        self.reviews = []   # List of Review instances
-
-    def add_amenity(self, amenity):
-        """Add an amenity to the place."""
-        if amenity not in self.amenities:
-            self.amenities.append(amenity)
-
-    def add_review(self, review):
-        """Add a review to the place."""
-        if review not in self.reviews:
-            self.reviews.append(review)
+        super().__init__(**kwargs)
