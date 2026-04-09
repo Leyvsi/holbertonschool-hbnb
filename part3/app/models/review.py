@@ -17,6 +17,8 @@ class Review(BaseModel):
     def __init__(self, **kwargs):
         """Initialize Review with rating and existence validation."""
     
+        super().__init__(**kwargs)
+        
         text = kwargs.get('text')
         rating = kwargs.get('rating')
 
@@ -26,4 +28,6 @@ class Review(BaseModel):
         if rating is None or not (1 <= int(rating) <= 5):
             raise ValueError("Rating must be an integer between 1 and 5")
        
-        super().__init__(**kwargs)
+    def __repr__(self):
+        """Simple display for debugging."""
+        return f"<Review {self.rating}* from User {self.user_id}>"

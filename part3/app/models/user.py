@@ -35,6 +35,9 @@ class User(BaseModel):
         if password:
             self.hash_password(password)
 
+    def __repr__(self):
+        return f"<User {self.first_name} {self.last_name}>"
+    
     def hash_password(self, password):
         """Hashes the password before storing it."""
         self.password = bcrypt.generate_password_hash(password).decode('utf-8')

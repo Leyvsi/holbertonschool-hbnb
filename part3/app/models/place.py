@@ -43,3 +43,6 @@ class Place(BaseModel):
             raise ValueError("Longitude must be between -180.0 and 180.0")
 
         super().__init__(**kwargs)
+
+    def __repr__(self):
+        return f"<Place {self.title}>"
