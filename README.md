@@ -18,4 +18,4 @@ This repository is organized by parts, representing the different stages of the 
 ## Documentation
 
 * **Part 1**: The technical design and architectural blueprints can be found in the [part1](./part1/) directory. These diagrams were created using Mermaid.js and follow UML standards.
-* **Part 3**: The database schema and ER diagrams can be found in the [part3](./part3/) directory. You can also view the [detailed database documentation here](./part3/DOCUMENTATION.md).
+* **Part 3**: The database schema and ER diagrams can be found in the [part3](./part3/) directory. You can also view the [detailed database documentation here](./part3/documentation.md).
