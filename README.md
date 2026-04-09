@@ -11,14 +11,11 @@ HBnB Evolution is a complete software development project that mimics a simplifi
 ## Repository Structure
 
 This repository is organized by parts, representing the different stages of the development lifecycle:
-* **Part 1: Technical Documentation**: Design phase including UML diagrams (Package, Class, and Sequence diagrams).
-* **Part 2: Business Logic**: Implementation of core models and services.
-* **Part 3: Database & Persistence**: Integration of the database, SQL scripts, and ER diagrams.
+* [**Part 1: Technical Documentation**](./part1/): Design phase including UML diagrams (Package, Class, and Sequence diagrams).
+* [**Part 2: Business Logic**](./part2/): Implementation of core models and services.
+* [**Part 3: Database & Persistence**](./part3/): Integration of the database, SQL scripts, and ER diagrams.
 
 ## Documentation
 
-* **Part 1**: The technical design and architectural blueprints can be found in the `part1` directory.
-* **Part 3**: The database schema, ER diagrams (Mermaid.js), and initial data scripts are available in the `part3` directory.
-
-### Visualizing the Database (Part 3)
-The latest Entity-Relationship diagram, showing the connections between Users, Places, and Reviews, can be viewed directly in the [Part 3 Documentation](./part3/DOCUMENTATION.md).
+* **Part 1**: The technical design and architectural blueprints can be found in the [part1](./part1/) directory. These diagrams were created using Mermaid.js and follow UML standards.
+* **Part 3**: The database schema and ER diagrams can be found in the [part3](./part3/) directory. You can also view the [detailed database documentation here](./part3/DOCUMENTATION.md).
