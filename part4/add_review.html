@@ -18,23 +18,23 @@
 
 <main>
 
-<form class="add-review">
     <h2>Add Review</h2>
 
-    <label>Comment:</label>
-    <textarea required></textarea>
+    <form id="review-form">
+        <textarea id="review-text" placeholder="Write review..." required></textarea>
 
-    <label>Rating:</label>
-    <select required>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-    </select>
+        <select id="review-rating">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
 
-    <button type="submit">Submit</button>
-</form>
+        <button type="submit">Submit</button>
+
+        <p id="message"></p>
+    </form>
 
 </main>
 
@@ -42,5 +42,6 @@
     <p>All rights reserved</p>
 </footer>
 
+<script src="scripts.js"></script>
 </body>
 </html>

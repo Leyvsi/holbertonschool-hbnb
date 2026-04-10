@@ -9,7 +9,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #ff5a5f;
+    background: #ff5a5f;
     padding: 10px 20px;
     color: white;
 }
@@ -26,13 +26,13 @@ header {
 
 /* NAV */
 nav {
-    background-color: #333;
+    background: #333;
     padding: 10px;
 }
 
 nav a {
     color: white;
-    margin-right: 15px;
+    margin-right: 10px;
     text-decoration: none;
 }
 
@@ -40,7 +40,7 @@ nav a {
 footer {
     text-align: center;
     padding: 10px;
-    background-color: #ddd;
+    background: #ddd;
     margin-top: 20px;
 }
 
@@ -50,15 +50,14 @@ footer {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 10px;
-    background-color: white;
+    background: white;
 }
 
 /* BUTTON */
 .details-button {
     display: inline-block;
-    margin-top: 10px;
     padding: 5px 10px;
-    background-color: #ff5a5f;
+    background: #ff5a5f;
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -69,7 +68,7 @@ form {
     margin: 20px;
 }
 
-input, textarea, select {
+input, select, textarea {
     display: block;
     width: 100%;
     margin-bottom: 10px;

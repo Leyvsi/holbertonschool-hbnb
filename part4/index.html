@@ -9,7 +9,7 @@
 
 <header>
     <img src="images/logo.png" class="logo">
-    <a href="login.html" class="login-button">Login</a>
+    <a href="login.html" class="login-button" id="login-link">Login</a>
 </header>
 
 <nav>
@@ -17,25 +17,23 @@
 </nav>
 
 <main>
-    <h1>Available Places</h1>
+    <h1>Places</h1>
 
-    <div class="place-card">
-        <h2>Cozy Apartment</h2>
-        <p>Price: $100/night</p>
-        <a href="place.html" class="details-button">View Details</a>
-    </div>
+    <label>Filter price:</label>
+    <select id="price-filter">
+        <option value="all">All</option>
+        <option value="10">10</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+    </select>
 
-    <div class="place-card">
-        <h2>Beach House</h2>
-        <p>Price: $200/night</p>
-        <a href="place.html" class="details-button">View Details</a>
-    </div>
-
+    <div id="places-list"></div>
 </main>
 
 <footer>
     <p>All rights reserved</p>
 </footer>
 
+<script src="scripts.js"></script>
 </body>
 </html>
