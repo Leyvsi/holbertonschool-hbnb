@@ -1,7 +1,14 @@
-body {
-    font-family: Arial, sans-serif;
+/* RESET */
+* {
     margin: 0;
-    background-color: #f5f5f5;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
 }
 
 /* HEADER */
@@ -9,9 +16,9 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #ff5a5f;
-    padding: 10px 20px;
-    color: white;
+    padding: 15px 30px;
+    background: white;
+    border-bottom: 1px solid #eee;
 }
 
 .logo {
@@ -19,58 +26,144 @@ header {
 }
 
 .login-button {
+    background: #ff5a5f;
     color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
     text-decoration: none;
     font-weight: bold;
+    transition: 0.3s;
+}
+
+.login-button:hover {
+    background: #e04848;
 }
 
 /* NAV */
 nav {
-    background: #333;
-    padding: 10px;
+    padding: 10px 30px;
+    background: #fff;
+    border-bottom: 1px solid #eee;
 }
 
-nav a {
-    color: white;
-    margin-right: 10px;
-    text-decoration: none;
+/* MAIN */
+main {
+    padding: 30px;
 }
 
-/* FOOTER */
-footer {
-    text-align: center;
+/* FILTER */
+select {
     padding: 10px;
-    background: #ddd;
-    margin-top: 20px;
-}
-
-/* CARDS */
-.place-card, .review-card {
-    margin: 20px;
-    padding: 10px;
+    border-radius: 8px;
     border: 1px solid #ddd;
-    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+/* GRID PLACES */
+#places-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+/* CARD */
+.place-card {
     background: white;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+.place-card:hover {
+    transform: translateY(-5px);
+}
+
+/* IMAGE PLACE */
+.place-card img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* TITLE */
+.place-card h2 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+/* PRICE */
+.price {
+    color: #ff5a5f;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
 /* BUTTON */
 .details-button {
     display: inline-block;
-    padding: 5px 10px;
-    background: #ff5a5f;
+    padding: 8px 12px;
+    background: black;
     color: white;
+    border-radius: 8px;
     text-decoration: none;
-    border-radius: 5px;
+    font-size: 14px;
+}
+
+.details-button:hover {
+    background: #333;
+}
+
+/* DETAILS PAGE */
+.place-details {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+/* REVIEWS */
+.review-card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 10px;
+    border-left: 4px solid #ff5a5f;
 }
 
 /* FORM */
 form {
-    margin: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 500px;
 }
 
-input, select, textarea {
-    display: block;
+textarea, input, select {
     width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
     margin-bottom: 10px;
-    padding: 8px;
+}
+
+button {
+    background: #ff5a5f;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #e04848;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    color: #777;
 }
