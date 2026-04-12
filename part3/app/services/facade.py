@@ -55,8 +55,16 @@ class HBnBFacade:
     
      #--PLACE METHODS--#
     def create_place(self, place_data):
+        amenity_ids = place_data.pop("amenities", [])
 
         place = Place(**place_data)
+
+        for amenity_id in amenity_ids:
+            amenity = self.amenity_repo.get(amenity_id)
+            if not amenity:
+                raise ValueError(f"Amenity with id {amenity_id} not found")
+        place.amenities.append(amenity)
+
         self.place_repo.add(place)
         return place
 

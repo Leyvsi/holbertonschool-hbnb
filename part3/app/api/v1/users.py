@@ -6,7 +6,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
 ns = Namespace('users', description='User operations')
 
-user_input_model = ns.model('User', {
+user_input_model = ns.model('UserCreate', {
     'first_name': fields.String(required=True, description='First name of the user'),
     'last_name': fields.String(required=True, description='Last name of the user'),
     'email': fields.String(required=True, description='Email of the user'),
@@ -14,7 +14,7 @@ user_input_model = ns.model('User', {
     'is_admin': fields.Boolean(required=False, description='Admin status (admin auth required if true)')
 })
 
-user_output_model = ns.model('User', {
+user_output_model = ns.model('UserOutput', {
     'id': fields.String(description='User ID'),
     'first_name': fields.String(description='First name of the user'),
     'last_name': fields.String(description='Last name of the user'),
