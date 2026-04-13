@@ -12,38 +12,38 @@ erDiagram
     PLACE }o--o{ AMENITY : "has"
 
     USER {
-        string id PK
-        string first_name
-        string last_name
-        string email UK
-        string password
+        varchar id PK
+        varchar first_name
+        varchar last_name
+        varchar email UK
+        varchar password
         boolean is_admin
     }
 
     PLACE {
-        string id PK
-        string title
-        string description
+        varchar id PK
+        varchar title
+        varchar description
         float price
         float latitude
         float longitude
-        string owner_id FK
+        varchar owner_id FK
     }
 
     REVIEW {
-        string id PK
-        string text
+        varchar id PK
+        varchar text
         int rating
-        string user_id FK
-        string place_id FK
+        varchar user_id FK
+        varchar place_id FK
     }
 
     AMENITY {
-        string id PK
-        string name UK
+        varchar id PK
+        varchar name UK
     }
 
     PLACE_AMENITY {
-        string place_id FK
-        string amenity_id FK
+        varchar place_id FK
+        varchar amenity_id FK
     }
